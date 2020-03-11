@@ -39,7 +39,25 @@ public class WikiPhilosophy {
      * @param source
      * @throws IOException
      */
-    public static void testConjecture(String destination, String source, int limit) throws IOException {
-        // TODO: FILL THIS IN!
+    public static boolean testConjecture(String destination, String source, int limit) throws IOException {
+        // Right now, this method tries the first link on the page, and if it is the destination, it returns true
+        // TODO: fix this method.
+        // Loop until reach limit, get stuck in a loop, reach a page with no links, or reach the destination
+        Element elt = getFirstValidLink(source);
+        String url = elt.attr("abs:href");
+        if (url.equals(destination))
+            return true;
+        return false;
+    }
+
+    /**
+     * @param url: url of the page we are visitng
+     * @return the Element containing the first hyperlink, or null.
+     */
+    private static Element getFirstValidLink(String url) throws IOException {
+        Elements paragraphs = wf.fetchWikipedia(url);
+        WikiParser wp = new WikiParser(paragraphs);
+        Element elt = wp.findFirstLink();
+        return elt;
     }
 }
